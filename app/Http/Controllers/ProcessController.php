@@ -1,7 +1,9 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class ProcessController extends Controller {
 
@@ -23,7 +25,7 @@ class ProcessController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth.basic');
+		$this->middleware('guest');
 	}
 
 	/**
@@ -37,8 +39,29 @@ class ProcessController extends Controller {
 	}
         
         // init departmentSelector page
-        public function departmentProcess($action, $params) {
-            switch ()
-        }
+        public function departmentProcess() {
+            if (isset($_POST['department']) && $_POST['department'] != '') {
+                if ($_POST['department'] == 'central') {
+                    $department = $_POST['department']
+            } 
+            
+            if (isset($_FILES['file'])) {
+                $file = fopen($_FILES['file']['tmp_name'],"r");
+                $i = 0;
+                
+                if ($department == 'central') {
+                    while(! feof($file)) {
+                        $row = fgetcsv($file);
 
+                        if (count($row) == 23) {
+                            echo(print_r($row, true));
+                        }
+                    }
+                }
+                
+                fclose($file);
+            } else {
+                exit();
+            }
+        }
 }

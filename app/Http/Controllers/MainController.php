@@ -36,11 +36,46 @@ class MainController extends Controller {
             return view('home');
 	}
         
-        // init departmentSelector page
+        // init departmentSelector page   
         public function departmentSelector() {
             $results = DB::select('select * from department_store where 1');
 
             return view('index', ['departments' => $results]);
         }
 
+        public function centralPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'central']);
+        }
+        
+        public function robinsonPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'robinson']);
+        }
+        
+        public function theMallPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'theMall']);
+        }
+        
+        public function outletMallPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'outletMall']);
+        }
+        
+        public function bigcPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'bigc']);
+        }
+        
+        public function lotusPageController() {
+            $results = DB::select('select * from department_store where 1');
+
+            return view('index', ['departments' => $results, 'page' => 'lotus']);
+        }
 }

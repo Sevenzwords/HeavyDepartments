@@ -15,15 +15,28 @@
 
 Route::get('/', 'MainController@departmentSelector');
 
+Route::post('/process', 'ProcessController@departmentProcess');
+
 Route::get('home', 'HomeController@index');
 
-Route::get('/central', function()
-{
-    
-    return view('central', ['name' => $_GET['test']]);
-});
+Route::get('/central', 'MainController@centralPageController');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::filter('csrf', function($route, $request) {
+    if (strtoupper($request -> getMethod()) === 'GET') {
+        return;
+        // get requests are not CSRF protected
+    }
+
+    $token = $request -> ajax() ? $request -> header('X-CSRF-Token') : Input::get('_token');
+
+    error_log($token);
+    
+    if (Session::token() != $token) {
+        throw new Illuminate\Session\TokenMismatchException;
+    }
+});
