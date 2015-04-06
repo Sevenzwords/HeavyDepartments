@@ -21,6 +21,8 @@ Route::get('home', 'HomeController@index');
 
 Route::get('/central', 'MainController@centralPageController');
 
+Route::get('/theMall', 'MainController@theMallPageController');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

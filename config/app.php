@@ -144,6 +144,8 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+            
+                'Maatwebsite\Excel\ExcelServiceProvider',
 
 	],
 
@@ -192,7 +194,7 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-
-	],
+                'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+	],   
 
 ];

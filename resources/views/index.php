@@ -35,6 +35,9 @@
         
         <!-- Javascript -->
         <script type="text/javascript" src="js/index.js?<?php echo time(); ?>"></script>
+        
+        <!-- Css -->
+        <link rel="stylesheet" type="text/css" href="css/main.css?<?php echo time(); ?>" />
     </head>
     
     <body>
@@ -45,7 +48,15 @@
         ?>
         
         <div id="hv_header_container">
-            Department store's report collector
+            <?php if ($page != 'index') {
+                if ($page == 'central') {
+                    echo('ห้าง Central');
+                } else {
+                    echo('ห้าง Robinson');
+                }    
+            } else {
+                echo("Department store's report collector");
+            } ?>         
         </div>
         
         <div id="hv_content_container">
@@ -65,11 +76,9 @@
                             <a href="/<?php echo(strtolower($departments[$i]['name'])); ?>"><?php echo($departments[$i]['name']); ?></a><br />
                     <?php } ?>
                 </form>
-            <?php } else if ($page == 'central') { ?>
+            <?php } else { ?>
                 <div id="hv_upload_form_container">
-                    <div id="hv_upload_file_button" data-department="central">
-                        อัพโหลดไฟล์
-                    </div>
+                    <input type="button" id="hv_upload_file_button" class="btn btn-info" data-department="<?php echo $page; ?>" value="อัพโหลดไฟล์" />
                 </div>
             <?php } ?>
         </div> 

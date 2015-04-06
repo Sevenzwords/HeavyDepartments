@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 29 มี.ค. 2558, 21:44:42
+    Author     : Setsuna
+*/
+
+$main-content-background-color: blue;
+$main-content-font-color: #ffffff;
+
+#hv_header_container {
+    background-color: $main-content-background-color;
+    height: 80px;
+    font-size: 2em;
+    padding: 10px;
+    color: $main-content-font-color;
+    margin-bottom: 50px;
+}
+
+#hv_content_container {
+    #hv_upload_form_container {
+        text-align: center;
+    }
+}

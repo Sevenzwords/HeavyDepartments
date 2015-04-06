@@ -37,9 +37,11 @@ hvIndex.init = function() {
 };
 
 hvIndex.initUploadButton = function(department) {
+    console.log(department);
+    
     if (department == 'central' || department == 'robinson') {
         var file_type = 'csv';
-    } else if (department == 'themall') {
+    } else if (department == 'theMall') {
         var file_type = 'xls';
     }
     

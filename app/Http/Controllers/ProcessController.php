@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
+//use Maatwebsite\Excel\Excel;
+use Excel;
 
 class ProcessController extends Controller {
 
@@ -41,12 +43,11 @@ class ProcessController extends Controller {
         // init departmentSelector page
         public function departmentProcess() {
             if (isset($_POST['department']) && $_POST['department'] != '') {
-                if ($_POST['department'] == 'central') {
-                    $department = $_POST['department']
+                $department = $_POST['department'];
             } 
             
             if (isset($_FILES['file'])) {
-                $file = fopen($_FILES['file']['tmp_name'],"r");
+                $file = fopen($_FILES['file']['tmp_name'], "r");
                 $i = 0;
                 
                 if ($department == 'central') {
@@ -57,6 +58,22 @@ class ProcessController extends Controller {
                             echo(print_r($row, true));
                         }
                     }
+                } else if ($department == 'theMall') {
+                    /*require_once('excel_reader2.php');
+                    $data = new Spreadsheet_Excel_Reader($_FILES['file']['name']);
+                    echo(print_r($data, true));*/
+                    
+                    Excel::load($_FILES['file']['tmp_name'], function($reader) {
+
+                        // reader methods
+                        //  error_log(print_r($reader, true));
+                        $results = $reader->get();
+                        
+                        //error_log(print_r($results, true));
+                        foreach($results as $result) {
+                            echo $result[5];
+                        }
+                    });
                 }
                 
                 fclose($file);
