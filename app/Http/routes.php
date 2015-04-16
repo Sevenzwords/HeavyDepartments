@@ -23,6 +23,8 @@ Route::get('/central', 'MainController@centralPageController');
 
 Route::get('/theMall', 'MainController@theMallPageController');
 
+Route::get('/lotus', 'MainController@lotusPageController');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

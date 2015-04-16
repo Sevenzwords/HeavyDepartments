@@ -39,6 +39,11 @@ class ProcessController extends Controller {
 	{
             return view('home');
 	}
+	
+	public function getDates()
+	{
+		return [];
+	}
         
         // init departmentSelector page
         public function departmentProcess() {
@@ -74,6 +79,97 @@ class ProcessController extends Controller {
                             echo $result[5];
                         }
                     });
+                } else if ($department == 'lotus') {
+                	Excel::load($_FILES['file']['tmp_name'], function($reader) {
+                	
+                		// reader methods
+                		//  error_log(print_r($reader, true));
+                		$results = $reader->get();
+                		$json['status'] = 0;
+                		
+                		// Column Mapping
+                		$vendor = 'consignment_sales_report';
+                		$name = 0;
+                		$store_no = 1;
+                		$store_name = 2;
+                		$style_no = 3;
+                		$description = 4;
+                		$sales_date = 5;
+                		$qty = 6;
+                		$gross_sales = 7;
+                		$return_amt = 8;
+                		$net_sales_inc_vat = 9;
+                		$vat_amt = 10;
+                		$net_sales_exc_vat = 11;
+                		$gp = 12;
+                		$gp_amount = 13;
+                		$vat_gp_amount = 14;
+                		$gp_amount_inc_vat = 15;
+                		$ap_amount = 16;
+                		$vat_amt = 17;
+                		$ap_amount_inc_vat = 18;
+                		
+                		/*$id = DB::table('lotus_report')->insertGetId(
+						    [
+                				'vendor' => $results[5][$vendor],
+                			 	'name' => $results[5][$name],
+                				'store_no' => $results[5][$store_no],
+                				'store_name' => $results[5][$store_name],
+                				'style_no' => $results[5][$style_no],
+                				'description' => $results[5][$description],
+                				'sales_date' => $results[5][$sales_date],
+                				'qty' => $results[5][$qty],
+                				'gross_sales' => $results[5][$gross_sales],
+                				'return_amt' => $results[5][$return_amt],
+                				'net_sales_inc_vat' => $results[5][$net_sales_inc_vat],
+                				'vat_amt' => $results[5][$vat_amt],
+                				'net_sales_exc_vat' => $results[5][$net_sales_exc_vat],
+                				'gp' => $results[5][$gp],
+                				'gp_amount' => $results[5][$gp_amount],
+                				'vat_gp_amount' => $results[5][$vat_gp_amount],
+                				'gp_amount_inc_vat' => $results[5][$gp_amount_inc_vat],
+                				'ap_amount' => $results[5][$ap_amount],
+                				'vat_amt' => $results[5][$vat_amt],
+                				'ap_amount_inc_vat' => $results[5][$ap_amount_inc_vat]
+							]
+						);*/
+                		
+                		//error_log(print_r($results, true));
+                		foreach($results as $result) {
+                			if ($result[$name] && $result[$name] != 'NAME') {
+                				$id = DB::table('lotus_report')->insertGetId(
+                					[
+                						'vendor' => $result[$vendor],
+                						'name' => $result[$name],
+                						'store_no' => $result[$store_no],
+                						'store_name' => $result[$store_name],
+                						'style_no' => $result[$style_no],
+                						'description' => $result[$description],
+                						'sales_date' => $result[$sales_date],
+                						'qty' => $result[$qty],
+                						'gross_sales' => $result[$gross_sales],
+                						'return_amt' => $result[$return_amt],
+                						'net_sales_inc_vat' => $result[$net_sales_inc_vat],
+                						'vat_amt' => $result[$vat_amt],
+                						'net_sales_exc_vat' => $result[$net_sales_exc_vat],
+                						'gp' => $result[$gp],
+                						'gp_amount' => $result[$gp_amount],
+                						'vat_gp_amount' => $result[$vat_gp_amount],
+                						'gp_amount_inc_vat' => $result[$gp_amount_inc_vat],
+                						'ap_amount' => $result[$ap_amount],
+                						'vat_amt' => $result[$vat_amt],
+                						'ap_amount_inc_vat' => $result[$ap_amount_inc_vat]
+                					]
+                				);
+                				
+                				if (!$id) {
+                					$json['status'] = 1;
+                				}
+                			}              			
+                		}
+                		
+                		echo(json_encode($json));
+                	});
                 }
                 
                 fclose($file);
