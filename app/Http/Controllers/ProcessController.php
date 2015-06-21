@@ -109,32 +109,6 @@ class ProcessController extends Controller {
                 		$vat_amt = 17;
                 		$ap_amount_inc_vat = 18;
                 		
-                		/*$id = DB::table('lotus_report')->insertGetId(
-						    [
-                				'vendor' => $results[5][$vendor],
-                			 	'name' => $results[5][$name],
-                				'store_no' => $results[5][$store_no],
-                				'store_name' => $results[5][$store_name],
-                				'style_no' => $results[5][$style_no],
-                				'description' => $results[5][$description],
-                				'sales_date' => $results[5][$sales_date],
-                				'qty' => $results[5][$qty],
-                				'gross_sales' => $results[5][$gross_sales],
-                				'return_amt' => $results[5][$return_amt],
-                				'net_sales_inc_vat' => $results[5][$net_sales_inc_vat],
-                				'vat_amt' => $results[5][$vat_amt],
-                				'net_sales_exc_vat' => $results[5][$net_sales_exc_vat],
-                				'gp' => $results[5][$gp],
-                				'gp_amount' => $results[5][$gp_amount],
-                				'vat_gp_amount' => $results[5][$vat_gp_amount],
-                				'gp_amount_inc_vat' => $results[5][$gp_amount_inc_vat],
-                				'ap_amount' => $results[5][$ap_amount],
-                				'vat_amt' => $results[5][$vat_amt],
-                				'ap_amount_inc_vat' => $results[5][$ap_amount_inc_vat]
-							]
-						);*/
-                		
-                		//error_log(print_r($results, true));
                 		foreach($results as $result) {
                 			if ($result[$name] && $result[$name] != 'NAME') {
                 				$id = DB::table('lotus_report')->insertGetId(
@@ -176,5 +150,39 @@ class ProcessController extends Controller {
             } else {
                 exit();
             }
+        }
+        
+        public function departmentReportProcess() {
+        	if (isset($_POST['department']) && $_POST['department'] != '') {
+        		$report_date_start = $_POST['report_date_start'] . ' 00:00:00';
+        		
+        		
+        		if (isset($_POST['report_date_end']) && $_POST['report_date_end'] != '') {
+        			$report_date_end = $_POST['report_date_end'] . ' 00:00:00';
+        		} else {
+        			$repost_date_end = 'NOW()';
+        		}
+        		
+        		if (isset($_POST['report_page']) && $_POST['report_page'] != '') {
+        			$report_page = $_POST['report_page'];
+        		} else {
+        			$report_page = 0;
+        		}
+        		
+        		
+        		switch($_POST['department']) {
+        			case 'lotus':     				
+        				// Test query builder
+        				//$report = DB::table('lotus_report')->where('sales_date', '>', $_POST['report_date_start'])->get();
+        				$report = DB::table('lotue_report')->whereBetween('sales_date', [$report_date_start, $report_date_end])
+        				 								   ->skip($report_page)->limit(30);
+        				
+        				echo(print_r($report, true));
+        				
+        				break;
+        			default:
+        				break;
+        		}
+        	}
         }
 }

@@ -75,8 +75,15 @@ class MainController extends Controller {
         
         public function lotusPageController() {
             $results = DB::select('select * from department_store where 1');
+            $report_result = DB::table('lotus_report')->paginate(15);
+            
+            if (isset($_GET['report_page'])) {
+            	$report_page = $_GET['report_page'];
+            } else {
+            	$report_page = 0;
+            }
 
-            return view('index', ['departments' => $results, 'page' => 'lotus']);
+            return view('index', ['departments' => $results, 'page' => 'lotus', 'report_page' => $report_page, 'report_result' => $report_result]);
         }
         
         // Test commit file

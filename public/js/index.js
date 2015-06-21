@@ -18,7 +18,7 @@ $(document).ready(function() {
 hvIndex.init = function() {
     hvIndex.bindButtons();
     
-    $.ajax({
+    /*$.ajax({
         url: '/process',
         headers: {
             'X-CSRF-TOKEN': hvIndex.csrfToken
@@ -33,15 +33,14 @@ hvIndex.init = function() {
         error: function(jqXHR, textStatus, errorThrown) {
             
         }
-    });
+    });*/
 };
 
 hvIndex.initUploadButton = function(department) {
-    console.log(department);
     
     if (department == 'central' || department == 'robinson') {
         var file_type = 'csv';
-    } else if (department == 'theMall') {
+    } else if (department == 'theMall' || department == 'lotus') {
         var file_type = 'xls';
     }
     
@@ -92,7 +91,43 @@ hvIndex.initUploadButton = function(department) {
 };
 
 hvIndex.bindButtons = function() {
+	$hv_report_date_selector_start = $('#hv_report_date_selector_start');
+	$hv_report_date_selector_end = $('#hv_report_date_selector_end');
+	$hv_show_report_submit = $('#hv_show_report_submit');
+	
     hvIndex.initUploadButton(hvIndex.page);
+    
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    
+    $hv_report_date_selector_start.datepicker();
+    $hv_report_date_selector_end.datepicker();
+    
+    $hv_show_report_submit.bind('click', function() {
+    	var report_date_start = $hv_report_date_selector_start.val();
+    	var report_date_end = $hv_report_date_selector_end.val();
+    	
+    	$.ajax({
+            url: '/report-process',
+            headers: {
+                'X-CSRF-TOKEN': hvIndex.csrfToken
+            },
+            method: 'post',
+            data: {
+                '_token': hvIndex.csrfToken,
+                'department': hvIndex.page,
+                'report_date_start': report_date_start,
+                'report_date_end': report_date_end
+            },
+            success: function(data, textStatus,jqXHR) {
+                console.log('Test success!');
+                console.log(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Error occured! ' + textStatus);
+            }
+        });
+    });
     
     $('#hv_content_container #hv_form_container input#hv_submit_button').bind('click', function() {
         

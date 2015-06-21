@@ -16,6 +16,10 @@
     if (!isset($page)) {
         $page = 'index';
     }
+    
+    if (!isset($report_result)) {
+    	$report_result = '';
+    }
 
 ?>
 
@@ -29,9 +33,12 @@
         <!-- Javascript library -->
         <script type="text/javascript" src="js/libs/jquery/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="js/libs/plupload-2.1.2/js/plupload.full.min.js"></script>
+        <script type="text/javascript" src="js/libs/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/libs/bootstrap/bootstrap-datepicker.js"></script>
         
         <!-- Css library -->
-        <link rel="stylesheet" type="text/css" href="css/libs/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/libs/bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/libs/bootstrap/bootstrap-datepicker.css" />
         
         <!-- Javascript -->
         <script type="text/javascript" src="js/index.js?<?php echo time(); ?>"></script>
@@ -51,9 +58,11 @@
             <?php if ($page != 'index') {
                 if ($page == 'central') {
                     echo('ห้าง Central');
-                } else {
+                } else if ($page == 'robinson') {
                     echo('ห้าง Robinson');
-                }    
+                } else if ($page == 'lotus') {
+                	echo('ห้าง Lotus');
+                }
             } else {
                 echo("Department store's report collector");
             } ?>         
@@ -79,6 +88,60 @@
             <?php } else { ?>
                 <div id="hv_upload_form_container">
                     <input type="button" id="hv_upload_file_button" class="btn btn-info" data-department="<?php echo $page; ?>" value="อัพโหลดไฟล์" />
+                </div>
+                
+                <div id="hv_report_view_container">
+                	<div id="hv_datepicker_container" class="container">
+					    <input id="hv_report_date_selector_start" type="text" data-date-format="dd-mm-yy" class="datepicker" />
+					    <input id="hv_report_date_selector_end" type="text" data-date-format="dd-mm-yy" class="datepicker" />
+					    <input id="hv_show_report_submit" type="button" class="btn btn-info" value="แสดง" />
+					</div>
+					<br />
+					<div id="hv_report_result_container table-responsive">
+						<table class="hv-report-table table-striped table-bordered table">
+							<?php if (isset($report_result)) { ?>
+								<tr>
+									<td>
+										ชื่อร้านค้า
+									</td>
+									<td>
+										รายละเอียด
+									</td>
+									<td>
+										วันที่ขาย
+									</td>
+									<td>
+										จำนวน
+									</td>
+									<td>
+										รายได้
+									</td>
+								</tr>
+								<?php foreach ($report_result as $item) { ?>
+									<tr>
+										<td>
+											<?php echo $item['name']; ?>
+										</td>
+										<td>
+											<?php echo $item['description']; ?>
+										</td>
+										<td>
+											<?php echo $item['sales_date']; ?>
+										</td>
+										<td>
+											<?php echo $item['qty']; ?>
+										</td>
+										<td>
+											<?php echo $item['gross_sales']; ?>
+										</td>
+									</tr>								
+								<?php }
+							}?>
+						</table>
+					</div>
+					<?php 
+						echo $report_result->render();
+					?>
                 </div>
             <?php } ?>
         </div> 
