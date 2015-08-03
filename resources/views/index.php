@@ -1,5 +1,4 @@
 <?php
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,7 +19,10 @@
     if (!isset($report_result)) {
     	$report_result = '';
     }
-
+    
+    // Filter parameter
+    $report_date_start = $_GET['report_date_start'];
+    $report_date_end = $_GET['report_date_end'];
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +73,7 @@
         <div id="hv_content_container">
             <?php if ($page == 'index') { ?>
                 <form id="hv_form_container">
-                    กรุณาเลือกห้าง
+                    
                     <!-- <select>
                         <?php for ($i = 0; $i < count($departments); $i ++) { ?>
                             <option value="<?php echo $departments[$i]['name']; ?>"><?php echo $departments[$i]['name']; ?></option>
@@ -92,8 +94,14 @@
                 
                 <div id="hv_report_view_container">
                 	<div id="hv_datepicker_container" class="container">
-					    <input id="hv_report_date_selector_start" type="text" data-date-format="dd-mm-yy" class="datepicker" />
-					    <input id="hv_report_date_selector_end" type="text" data-date-format="dd-mm-yy" class="datepicker" />
+                		ตั้งแต่:
+					    <input id="hv_report_date_selector_start" type="text" data-date-format="dd-mm-yy" class="datepicker" 
+					    	value="<?php echo $_GET['report_date_start']; ?>"	
+				    	/>
+					    ถึง:
+					    <input id="hv_report_date_selector_end" type="text" data-date-format="dd-mm-yy" class="datepicker" 
+					    	value="<?php echo $_GET['report_date_end']; ?>"	
+					    />
 					    <input id="hv_show_report_submit" type="button" class="btn btn-info" value="แสดง" />
 					</div>
 					<br />
@@ -140,7 +148,14 @@
 						</table>
 					</div>
 					<?php 
-						echo $report_result->render();
+						// Render a report as a pagination view					
+						if (isset($_GET['report_date_start']) && $_GET['report_date_start'] != ''
+								&& isset($_GET['report_date_end']) && $_GET['report_date_end'] != '') {
+							echo $report_result->appends(['report_date_start' => $_GET['report_date_start']
+									, 'report_date_end' => $_GET['report_date_end']])->render();
+						} else {
+							echo $report_result->render();
+						}						
 					?>
                 </div>
             <?php } ?>

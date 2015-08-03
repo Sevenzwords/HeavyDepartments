@@ -107,7 +107,7 @@ hvIndex.bindButtons = function() {
     	var report_date_start = $hv_report_date_selector_start.val();
     	var report_date_end = $hv_report_date_selector_end.val();
     	
-    	$.ajax({
+    	/*$.ajax({
             url: '/report-process',
             headers: {
                 'X-CSRF-TOKEN': hvIndex.csrfToken
@@ -126,7 +126,9 @@ hvIndex.bindButtons = function() {
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log('Error occured! ' + textStatus);
             }
-        });
+        });*/
+    	
+    	window.location.href = window.location.href.split('?')[0] + '?report_date_start=' + report_date_start + '&report_date_end=' + report_date_end;
     });
     
     $('#hv_content_container #hv_form_container input#hv_submit_button').bind('click', function() {
