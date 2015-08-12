@@ -134,5 +134,15 @@ hvIndex.bindButtons = function() {
     $('#hv_content_container #hv_form_container input#hv_submit_button').bind('click', function() {
         
     });
+    
+    $('#hv_footer_container #hv_export_excel_button').bind('click', function(event) {	
+    	$hv_report_date_selector_start = $('#hv_report_date_selector_start');
+    	$hv_report_date_selector_end = $('#hv_report_date_selector_end');
+    	
+    	window.location = '/report-export?_token=' + hvIndex.csrfToken 
+    						+ '&department=' + hvIndex.page 
+    						+ '&report_date_start=' + $hv_report_date_selector_start.val() 
+    						+ '&report_date_end=' + $hv_report_date_selector_end.val();
+    });
 };
 

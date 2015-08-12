@@ -185,28 +185,4 @@ class ProcessController extends Controller {
        		}
        	}
 	}
-	
-	public function departmentReportExport () {
-		if (isset($_POST['report_date_start']) && $_POST['report_date_start'] != ''
-				&& isset($_POST['report_date_end']) && $_POST['report_date_end'] != '') {
-			Excel::create('Report-' . Carbon::now(), function($excel) {
-				// Set the title
-				$excel->setTitle('Report');
-				
-				// Chain the setters
-				$excel->setCreator('Admin')
-					  ->setCompany('Heavy');
-				
-				// Call them separately
-				$excel->setDescription('A demonstration to change the file properties');
-				
-				$excel->sheet('Sheetname', function($sheet) {
-				
-					// Sheet manipulation
-				
-				});
-			
-			})->download('xlsx');
-		}
-	}
 }

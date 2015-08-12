@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent;
 use Carbon\Carbon;
+use Excel;
 
 class MainController extends Controller {
 
@@ -84,8 +85,6 @@ class MainController extends Controller {
 				
 				$report_date_start = Carbon::create(2000 + $report_date_start_array[2], $report_date_start_array[1], $report_date_start_array[0], 0, 0, 0);
 				$report_date_end = Carbon::create(2000 + $report_date_end_array[2], $report_date_end_array[1], $report_date_end_array[0], 0, 0, 0);
-				
-            	error_log('Report start: ' . $report_date_start . ' // Report end: ' . $report_date_end);
             	
             	$report_result = DB::table('lotus_report')->whereBetween('sales_date', [$report_date_start, $report_date_end])->paginate(15);
 			} else {
@@ -101,5 +100,42 @@ class MainController extends Controller {
             return view('index', ['departments' => $results, 'page' => 'lotus', 'report_page' => $report_page, 'report_result' => $report_result]);
         }
         
-        // Test commit file
+        public function departmentReportExport () {
+        	//if (isset($_POST['report_date_start']) && $_POST['report_date_start'] != ''
+        			//&& isset($_POST['report_date_end']) && $_POST['report_date_end'] != '') {
+	        	Excel::create('Report-' . Carbon::now(), function($excel) {
+	        		// Set the title
+	        		$excel->setTitle('Report');
+	        
+	        		// Chain the setters
+	        		$excel->setCreator('Admin')
+	        		->setCompany('Heavy');
+	        
+	        		// Call them separately
+	        		$excel->setDescription('A demonstration to change the file properties');
+	        
+	        		$excel->sheet('Sheetname', function($sheet) {
+	        			
+	        			$result = $this->getReportByFilter('lotus');
+	        			// Sheet manipulation
+	        			$sheet->fromArray($result->get());
+	        		});
+	        	})->download('xls');
+        	//}
+        }
+        
+        public function getReportByFilter($department) {
+        	if (isset($_GET['report_date_start']) && $_GET['report_date_start'] != ''
+        				&& isset($_GET['report_date_end']) && $_GET['report_date_end']) {
+       			$report_date_start_array = explode('-', trim($_GET['report_date_start']));
+       			$report_date_end_array = explode('-', trim($_GET['report_date_end']));
+        	
+       			$report_date_start = Carbon::create(2000 + $report_date_start_array[2], $report_date_start_array[1], $report_date_start_array[0], 0, 0, 0);
+       			$report_date_end = Carbon::create(2000 + $report_date_end_array[2], $report_date_end_array[1], $report_date_end_array[0], 0, 0, 0);
+        				 
+       			return $report_result = DB::table($department . '_report')->whereBetween('sales_date', [$report_date_start, $report_date_end]);
+       		} else {
+       			return $report_result = DB::table($department . '_report')->where('style_no', '3736427');
+       		}
+        }
 }

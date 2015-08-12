@@ -21,8 +21,17 @@
     }
     
     // Filter parameter
-    $report_date_start = $_GET['report_date_start'];
-    $report_date_end = $_GET['report_date_end'];
+    $report_date_start = '';
+    $report_date_end = '';
+    
+    if (isset($_GET['report_date_start']) && $_GET['report_date_start'] != '') {
+    	$report_date_start = $_GET['report_date_start'];
+    }
+    
+    if (isset($_GET['report_date_end']) && $_GET['report_date_end'] != '') {
+    	$report_date_end = $_GET['report_date_end'];
+    }
+        
 ?>
 
 <!DOCTYPE html>
@@ -96,11 +105,11 @@
                 	<div id="hv_datepicker_container" class="container">
                 		ตั้งแต่:
 					    <input id="hv_report_date_selector_start" type="text" data-date-format="dd-mm-yy" class="datepicker" 
-					    	value="<?php echo $_GET['report_date_start']; ?>"	
+					    	value="<?php echo $report_date_start; ?>"	
 				    	/>
 					    ถึง:
 					    <input id="hv_report_date_selector_end" type="text" data-date-format="dd-mm-yy" class="datepicker" 
-					    	value="<?php echo $_GET['report_date_end']; ?>"	
+					    	value="<?php echo $report_date_end; ?>"	
 					    />
 					    <input id="hv_show_report_submit" type="button" class="btn btn-info" value="แสดง" />
 					</div>
@@ -164,6 +173,10 @@
         <div id="hv_hidden_container">
             <input id="hv_csrf_token" type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
             <input id="hv_page_name" type="hidden" name="_page" value="<?php echo($page); ?>" />
+        </div>
+        
+        <div id="hv_footer_container">
+        	<input id="hv_export_excel_button" class="btn btn-info" type="button" value="Export" />
         </div>
     </body>
 </html>

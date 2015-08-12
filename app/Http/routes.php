@@ -19,6 +19,8 @@ Route::post('/process', 'ProcessController@departmentProcess');
 
 Route::post('/report-process', 'ProcessController@departmentReportProcess');
 
+Route::get('/report-export', 'MainController@departmentReportExport');
+
 Route::get('home', 'HomeController@index');
 
 Route::get('/central', 'MainController@centralPageController');
