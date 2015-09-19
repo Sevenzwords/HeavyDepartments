@@ -59,8 +59,16 @@ class MainController extends Controller {
         
         public function theMallPageController() {
             $results = DB::select('select * from department_store where 1');
+            
+            $report_result = $this->getReportByFilter('the_mall');
+            
+            if (isset($_GET['report_page'])) {
+            	$report_page = $_GET['report_page'];
+            } else {
+            	$report_page = 0;
+            }
 
-            return view('index', ['departments' => $results, 'page' => 'theMall']);
+            return view('index', ['departments' => $results, 'page' => 'theMall', 'report_page' => $report_page, 'report_result' => $report_result]);
         }
         
         public function outletMallPageController() {
@@ -77,19 +85,8 @@ class MainController extends Controller {
         
         public function lotusPageController() {
             $results = DB::select('select * from department_store where 1');
-            
-            if (isset($_GET['report_date_start']) && $_GET['report_date_start'] != ''
-					&& isset($_GET['report_date_end']) && $_GET['report_date_end']) {
-				$report_date_start_array = explode('-', trim($_GET['report_date_start']));
-				$report_date_end_array = explode('-', trim($_GET['report_date_end']));
-				
-				$report_date_start = Carbon::create(2000 + $report_date_start_array[2], $report_date_start_array[1], $report_date_start_array[0], 0, 0, 0);
-				$report_date_end = Carbon::create(2000 + $report_date_end_array[2], $report_date_end_array[1], $report_date_end_array[0], 0, 0, 0);
-            	
-            	$report_result = DB::table('lotus_report')->whereBetween('sales_date', [$report_date_start, $report_date_end])->paginate(15);
-			} else {
-				$report_result = DB::table('lotus_report')->where('style_no', '3736427')->paginate(15);
-			}            
+			
+			$report_result = $this->getReportByFilter('lotus');
             
             if (isset($_GET['report_page'])) {
             	$report_page = $_GET['report_page'];
@@ -124,7 +121,7 @@ class MainController extends Controller {
         	//}
         }
         
-        public function getReportByFilter($department) {
+        private function getReportByFilter($department) {
         	if (isset($_GET['report_date_start']) && $_GET['report_date_start'] != ''
         				&& isset($_GET['report_date_end']) && $_GET['report_date_end']) {
        			$report_date_start_array = explode('-', trim($_GET['report_date_start']));
@@ -133,9 +130,9 @@ class MainController extends Controller {
        			$report_date_start = Carbon::create(2000 + $report_date_start_array[2], $report_date_start_array[1], $report_date_start_array[0], 0, 0, 0);
        			$report_date_end = Carbon::create(2000 + $report_date_end_array[2], $report_date_end_array[1], $report_date_end_array[0], 0, 0, 0);
         				 
-       			return $report_result = DB::table($department . '_report')->whereBetween('sales_date', [$report_date_start, $report_date_end]);
+       			return $report_result = DB::table($department . '_report')->whereBetween('sales_date', [$report_date_start, $report_date_end])->paginate(15);
        		} else {
-       			return $report_result = DB::table($department . '_report')->where('style_no', '3736427');
+       			return $report_result = DB::table($department . '_report')->paginate(15);
        		}
         }
 }

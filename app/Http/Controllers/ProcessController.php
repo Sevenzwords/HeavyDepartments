@@ -8,6 +8,7 @@ use RuntimeException;
 //use Maatwebsite\Excel\Excel;
 use Excel;
 
+
 class ProcessController extends Controller {
 
 	/*
@@ -56,29 +57,49 @@ class ProcessController extends Controller {
             $file = fopen($_FILES['file']['tmp_name'], "r");
             $i = 0;
                 
-            if ($department == 'central') {
-                while(! feof($file)) {
+            if ($department == 'central' || $department == 'robinson') {
+                while (!feof($file)) {
                     $row = fgetcsv($file);
 
                     if (count($row) == 23) {
                         echo(print_r($row, true));
                     }
                 }
+            } else if ($department == 'outletMall') {
+            	
             } else if ($department == 'theMall') {
-                /*require_once('excel_reader2.php');
-                $data = new Spreadsheet_Excel_Reader($_FILES['file']['name']);
-                echo(print_r($data, true));*/
-                    
-                Excel::load($_FILES['file']['tmp_name'], function($reader) {
-                    // reader methods
-                    //  error_log(print_r($reader, true));
-                    $results = $reader->get();
-                        
-                    //error_log(print_r($results, true));
-                    foreach($results as $result) {
-                        echo $result[5];
-                    }
-                });
+                
+                // init pdf parser
+                $parser = new \Smalot\PdfParser\Parser();
+                $pdf    = $parser->parseFile($_FILES['file']['tmp_name']);
+                
+                $text = $pdf->getText();
+                //echo $text;
+                
+                $result_array = preg_split('/\s+/', $text);
+                echo(print_r($result_array, true));
+                
+                // Retrieve all details from the pdf file.
+                /*$details  = $pdf->getDetails();
+                
+                // Loop over each property to extract values (string or array).
+                foreach ($details as $property => $value) {
+                	if (is_array($value)) {
+                		$value = implode(', ', $value);
+                	}
+                	echo $property . ' => ' . $value . "\n";
+                }*/
+                
+                
+                // Retrieve all pages from the pdf file.
+                /*$pages  = $pdf->getPages();
+                
+                // Loop over each page to extract text.
+                foreach ($pages as $page) {
+                	echo $page->getText();
+                }*/
+                
+                
             } else if ($department == 'lotus') {
             	Excel::load($_FILES['file']['tmp_name'], function($reader) {
                 	

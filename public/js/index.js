@@ -40,8 +40,10 @@ hvIndex.initUploadButton = function(department) {
     
     if (department == 'central' || department == 'robinson') {
         var file_type = 'csv';
-    } else if (department == 'theMall' || department == 'lotus') {
+    } else if (department == 'lotus') {
         var file_type = 'xls';
+    } else if (department == 'theMall') {
+    	var file_type = 'pdf';
     }
     
     var uploader = new plupload.Uploader({

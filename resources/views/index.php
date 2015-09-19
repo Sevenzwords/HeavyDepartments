@@ -73,6 +73,8 @@
                     echo('ห้าง Robinson');
                 } else if ($page == 'lotus') {
                 	echo('ห้าง Lotus');
+                } else if ($page == 'theMall') {
+                	echo('ห้าง The Mall');
                 }
             } else {
                 echo("Department store's report collector");
